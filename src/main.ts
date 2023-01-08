@@ -26,14 +26,13 @@ const main = async () => {
   scene.createDefaultCameraOrLight(true, true, true);
   MeshBuilder.CreateBox("box", { size: 0.2 }, scene);
 
-  const featureManager = (
-    await scene.createDefaultXRExperienceAsync({
-      uiOptions: {
-        sessionMode: "immersive-ar",
-        referenceSpaceType: "unbounded",
-      },
-    })
-  ).baseExperience.featuresManager;
+  const xr = await scene.createDefaultXRExperienceAsync({
+    uiOptions: {
+      sessionMode: "immersive-ar",
+      referenceSpaceType: "unbounded",
+    },
+  });
+  const featureManager = xr.baseExperience.featuresManager;
 
   const depthSensing = featureManager.enableFeature(
     WebXRFeatureName.DEPTH_SENSING,
