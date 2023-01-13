@@ -5,6 +5,7 @@ import {
   IWebXRDepthSensingOptions,
   MeshBuilder,
   Scene,
+  StandardMaterial,
   WebXRDepthSensing,
   WebXRFeatureName,
 } from "@babylonjs/core";
@@ -24,7 +25,10 @@ const main = async () => {
   const scene = new Scene(engine);
 
   scene.createDefaultCameraOrLight(true, true, true);
-  MeshBuilder.CreateBox("box", { size: 0.2 }, scene);
+
+  const material = new StandardMaterial("mat", scene);
+  const box = MeshBuilder.CreateBox("box", { size: 0.2 }, scene);
+  box.material = material;
 
   const xr = await scene.createDefaultXRExperienceAsync({
     uiOptions: {
@@ -45,7 +49,18 @@ const main = async () => {
     true
   ) as WebXRDepthSensing;
 
-  console.log(depthSensing.attached);
+  xr.baseExperience.sessionManager.runInXRFrame(() => {
+    console.log(
+      "width: ",
+      depthSensing.width,
+      "\nheight: ",
+      depthSensing.height,
+      "\ncenter depth: ",
+      depthSensing.getDepthInMeters(0.5, 0.5)
+    );
+
+    material.diffuseTexture = depthSensing.latestDepthImageTexture;
+  });
 
   engine.runRenderLoop(() => {
     scene.render();
