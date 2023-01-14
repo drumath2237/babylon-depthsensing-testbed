@@ -9,6 +9,7 @@ import {
   WebXRDepthSensing,
   WebXRFeatureName,
 } from "@babylonjs/core";
+import { AdvancedDynamicTexture, TextBlock } from "@babylonjs/gui";
 
 const main = async () => {
   const renderCanvas = document.getElementById(
@@ -65,6 +66,24 @@ const main = async () => {
   engine.runRenderLoop(() => {
     scene.render();
   });
+};
+
+const useGUI = (scene: Scene) => {
+  const advancedTexture = AdvancedDynamicTexture.CreateFullscreenUI(
+    "fullscreen",
+    true,
+    scene
+  );
+
+  const textBlock = new TextBlock("text block");
+  textBlock.fontSize = 24;
+  textBlock.color = "white";
+
+  advancedTexture.addControl(textBlock);
+
+  return {
+    textBlock,
+  };
 };
 
 main();
