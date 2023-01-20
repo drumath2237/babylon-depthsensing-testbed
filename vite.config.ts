@@ -13,6 +13,14 @@ export default defineConfig(({ mode }) => {
       },
     };
   } else {
-    return {};
+    return {
+      preview: {
+        https: {
+          key: fs.readFileSync("./key.pem"),
+          cert: fs.readFileSync("./cert.pem"),
+        },
+        port: 3000,
+      },
+    };
   }
 });

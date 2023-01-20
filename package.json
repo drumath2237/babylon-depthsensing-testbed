@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --host",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview --host"
   },
   "devDependencies": {
     "@types/node": "^18.11.18",
@@ -15,6 +15,6 @@
     "vite": "^4.0.0"
   },
   "dependencies": {
-    "@babylonjs/gui": "^5.42.0"
+    "@babylonjs/gui": "^5.43.0"
   }
 }

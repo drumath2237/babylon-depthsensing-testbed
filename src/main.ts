@@ -7,9 +7,8 @@ import {
   Scene,
   StandardMaterial,
   WebXRDepthSensing,
-  WebXRFeatureName,
 } from "@babylonjs/core";
-import { AdvancedDynamicTexture, TextBlock } from "@babylonjs/gui";
+// import { AdvancedDynamicTexture, TextBlock } from "@babylonjs/gui";
 
 const main = async () => {
   const renderCanvas = document.getElementById(
@@ -36,12 +35,16 @@ const main = async () => {
       sessionMode: "immersive-ar",
       referenceSpaceType: "unbounded",
     },
+    optionalFeatures: true,
   });
   const featureManager = xr.baseExperience.featuresManager;
 
+  const d = new WebXRDepthSensing(1 as any, 1 as any);
+  console.log(d);
+
   const depthSensing = featureManager.enableFeature(
-    WebXRFeatureName.DEPTH_SENSING,
-    "latest",
+    "xr-depth-sensing",
+    1,
     {
       dataFormatPreference: ["luminance-alpha"],
       usagePreference: ["cpu-optimized"],
@@ -50,7 +53,7 @@ const main = async () => {
     true
   ) as WebXRDepthSensing;
 
-  xr.baseExperience.sessionManager.runInXRFrame(() => {
+  xr.baseExperience.sessionManager.onXRFrameObservable.add((_frame) => {
     console.log(
       "width: ",
       depthSensing.width,
@@ -68,22 +71,21 @@ const main = async () => {
   });
 };
 
-const useGUI = (scene: Scene) => {
-  const advancedTexture = AdvancedDynamicTexture.CreateFullscreenUI(
-    "fullscreen",
-    true,
-    scene
-  );
+// const useGUI = () => {
+//   const advancedTexture = AdvancedDynamicTexture.CreateFullscreenUI(
+//     "fullscreen",
+//     true
+//   );
 
-  const textBlock = new TextBlock("text block");
-  textBlock.fontSize = 24;
-  textBlock.color = "white";
+//   const textBlock = new TextBlock("text block");
+//   textBlock.fontSize = 24;
+//   textBlock.color = "white";
 
-  advancedTexture.addControl(textBlock);
+//   advancedTexture.addControl(textBlock);
 
-  return {
-    textBlock,
-  };
-};
+//   return {
+//     textBlock,
+//   };
+// };
 
 main();

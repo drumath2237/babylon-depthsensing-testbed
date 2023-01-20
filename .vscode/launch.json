@@ -1,0 +1,16 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "android-webview",
+      "request": "attach",
+      "name": "Attach to Android WebView",
+      "webRoot": "${workspaceFolder}",
+      "application": "com.android.chrome",
+      "urlFilter": "https://192.168.11.9:3000"
+    }
+  ]
+}
