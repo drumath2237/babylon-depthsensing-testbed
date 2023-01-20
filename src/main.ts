@@ -65,11 +65,15 @@ const main = async () => {
 
     material.diffuseTexture = depthSensing.latestDepthImageTexture;
 
+    const cachedDepth = depthSensing.latestDepthBuffer;
+    if (cachedDepth) {
+      console.log("hi");
+    }
+
     const buffer = await depthSensing.latestDepthImageTexture?.readPixels();
     if (buffer) {
       const depthBuffer = new Uint16Array(buffer.buffer);
-      const height = depthSensing.latestDepthImageTexture?.getSize().height;
-      const w = depthSensing.latestDepthImageTexture?.getSize().width;
+      const size = depthSensing.latestDepthImageTexture?.getSize();
     }
   });
 
