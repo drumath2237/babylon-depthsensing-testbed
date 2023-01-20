@@ -53,17 +53,24 @@ const main = async () => {
     true
   ) as WebXRDepthSensing;
 
-  xr.baseExperience.sessionManager.onXRFrameObservable.add((_frame) => {
+  xr.baseExperience.sessionManager.onXRFrameObservable.add(async () => {
     console.log(
       "width: ",
       depthSensing.width,
       "\nheight: ",
-      depthSensing.height,
-      "\ncenter depth: ",
-      depthSensing.getDepthInMeters(0.5, 0.5)
+      depthSensing.height
+      // "\ncenter depth: ",
+      // depthSensing.getDepthInMeters(0.5, 0.5)
     );
 
     material.diffuseTexture = depthSensing.latestDepthImageTexture;
+
+    const buffer = await depthSensing.latestDepthImageTexture?.readPixels();
+    if (buffer) {
+      const depthBuffer = new Uint16Array(buffer.buffer);
+      const height = depthSensing.latestDepthImageTexture?.getSize().height;
+      const w = depthSensing.latestDepthImageTexture?.getSize().width;
+    }
   });
 
   engine.runRenderLoop(() => {

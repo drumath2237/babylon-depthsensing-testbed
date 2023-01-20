@@ -10,7 +10,7 @@
       "name": "Attach to Android WebView",
       "webRoot": "${workspaceFolder}",
       "application": "com.android.chrome",
-      "urlFilter": "https://192.168.11.9:3000"
+      "urlFilter": "https://192.168.11.17:3000"
     }
   ]
 }
