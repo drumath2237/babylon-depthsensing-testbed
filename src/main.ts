@@ -5,7 +5,9 @@ import {
   IWebXRDepthSensingOptions,
   MeshBuilder,
   Scene,
+  Space,
   StandardMaterial,
+  Vector3,
   WebXRDepthSensing,
 } from "@babylonjs/core";
 // import { AdvancedDynamicTexture, TextBlock } from "@babylonjs/gui";
@@ -29,6 +31,7 @@ const main = async () => {
   const material = new StandardMaterial("mat", scene);
   const box = MeshBuilder.CreateBox("box", { size: 0.2 }, scene);
   box.material = material;
+  box.rotate(new Vector3(1, 0, 0), Math.PI / 2, Space.LOCAL);
 
   const xr = await scene.createDefaultXRExperienceAsync({
     uiOptions: {
@@ -38,9 +41,6 @@ const main = async () => {
     optionalFeatures: true,
   });
   const featureManager = xr.baseExperience.featuresManager;
-
-  const d = new WebXRDepthSensing(1 as any, 1 as any);
-  console.log(d);
 
   const depthSensing = featureManager.enableFeature(
     "xr-depth-sensing",
@@ -54,27 +54,22 @@ const main = async () => {
   ) as WebXRDepthSensing;
 
   xr.baseExperience.sessionManager.onXRFrameObservable.add(async () => {
-    console.log(
-      "width: ",
-      depthSensing.width,
-      "\nheight: ",
-      depthSensing.height
-      // "\ncenter depth: ",
-      // depthSensing.getDepthInMeters(0.5, 0.5)
-    );
-
     material.diffuseTexture = depthSensing.latestDepthImageTexture;
+    const size = depthSensing.latestDepthImageTexture?.getSize();
+    if (size) {
+      box.scaling = new Vector3(size.height / 100, size.width / 100, 1);
+    }
 
     const cachedDepth = depthSensing.latestDepthBuffer;
     if (cachedDepth) {
       console.log("hi");
     }
 
-    const buffer = await depthSensing.latestDepthImageTexture?.readPixels();
-    if (buffer) {
-      const depthBuffer = new Uint16Array(buffer.buffer);
-      const size = depthSensing.latestDepthImageTexture?.getSize();
-    }
+    // const buffer = await depthSensing.latestDepthImageTexture?.readPixels();
+    // if (buffer) {
+    //   const depthBuffer = new Uint16Array(buffer.buffer);
+    //   const size = depthSensing.latestDepthImageTexture?.getSize();
+    // }
   });
 
   engine.runRenderLoop(() => {
