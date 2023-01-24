@@ -29,9 +29,9 @@ const main = async () => {
   scene.createDefaultCameraOrLight(true, true, true);
 
   const material = new StandardMaterial("mat", scene);
-  const box = MeshBuilder.CreateBox("box", { size: 0.2 }, scene);
-  box.material = material;
-  box.rotate(new Vector3(1, 0, 0), Math.PI / 2, Space.LOCAL);
+  const plane = MeshBuilder.CreatePlane("plane", { size: 0.1 }, scene);
+  plane.material = material;
+  plane.rotate(new Vector3(0, 0, 1), -Math.PI / 2, Space.LOCAL);
 
   const xr = await scene.createDefaultXRExperienceAsync({
     uiOptions: {
@@ -57,7 +57,7 @@ const main = async () => {
     material.diffuseTexture = depthSensing.latestDepthImageTexture;
     const size = depthSensing.latestDepthImageTexture?.getSize();
     if (size) {
-      box.scaling = new Vector3(size.height / 100, size.width / 100, 1);
+      plane.scaling = new Vector3(size.width / 100, size.height / 100, 1);
     }
 
     const cachedDepth = depthSensing.latestDepthBuffer;
