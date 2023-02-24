@@ -61,37 +61,12 @@ const main = async () => {
     }
 
     const cachedDepth = depthSensing.latestDepthBuffer;
-    if (cachedDepth) {
-      console.log("hi");
-    }
-
-    // const buffer = await depthSensing.latestDepthImageTexture?.readPixels();
-    // if (buffer) {
-    //   const depthBuffer = new Uint16Array(buffer.buffer);
-    //   const size = depthSensing.latestDepthImageTexture?.getSize();
-    // }
+    console.log(cachedDepth);
   });
 
   engine.runRenderLoop(() => {
     scene.render();
   });
 };
-
-// const useGUI = () => {
-//   const advancedTexture = AdvancedDynamicTexture.CreateFullscreenUI(
-//     "fullscreen",
-//     true
-//   );
-
-//   const textBlock = new TextBlock("text block");
-//   textBlock.fontSize = 24;
-//   textBlock.color = "white";
-
-//   advancedTexture.addControl(textBlock);
-
-//   return {
-//     textBlock,
-//   };
-// };
 
 main();
