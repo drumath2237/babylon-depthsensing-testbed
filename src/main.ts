@@ -9,6 +9,7 @@ import {
   StandardMaterial,
   Vector3,
   WebXRDepthSensing,
+  WebXRFeatureName,
 } from "@babylonjs/core";
 // import { AdvancedDynamicTexture, TextBlock } from "@babylonjs/gui";
 
@@ -32,6 +33,7 @@ const main = async () => {
   const plane = MeshBuilder.CreatePlane("plane", { size: 0.1 }, scene);
   plane.material = material;
   plane.rotate(new Vector3(0, 0, 1), -Math.PI / 2, Space.LOCAL);
+  plane.scaling = new Vector3(1.6, 0.9, 1);
 
   const xr = await scene.createDefaultXRExperienceAsync({
     uiOptions: {
@@ -41,10 +43,11 @@ const main = async () => {
     optionalFeatures: true,
   });
   const featureManager = xr.baseExperience.featuresManager;
+  const sessionManager = xr.baseExperience.sessionManager;
 
   const depthSensing = featureManager.enableFeature(
-    "xr-depth-sensing",
-    1,
+    WebXRFeatureName.DEPTH_SENSING,
+    "latest",
     {
       dataFormatPreference: ["luminance-alpha"],
       usagePreference: ["cpu-optimized"],
@@ -53,15 +56,12 @@ const main = async () => {
     true
   ) as WebXRDepthSensing;
 
-  xr.baseExperience.sessionManager.onXRFrameObservable.add(async () => {
-    material.diffuseTexture = depthSensing.latestDepthImageTexture;
-    const size = depthSensing.latestDepthImageTexture?.getSize();
-    if (size) {
-      plane.scaling = new Vector3(size.width / 100, size.height / 100, 1);
-    }
+  sessionManager.onXRFrameObservable.add(() => {
+    // describe depth image dimentions
+    console.log(depthSensing.width, depthSensing.height);
 
-    const cachedDepth = depthSensing.latestDepthBuffer;
-    console.log(cachedDepth);
+    // obtain depth image texture
+    material.diffuseTexture = depthSensing.latestDepthImageTexture;
   });
 
   engine.runRenderLoop(() => {
