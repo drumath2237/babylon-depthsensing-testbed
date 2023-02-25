@@ -11,7 +11,6 @@ import {
   WebXRDepthSensing,
   WebXRFeatureName,
 } from "@babylonjs/core";
-// import { AdvancedDynamicTexture, TextBlock } from "@babylonjs/gui";
 
 const main = async () => {
   const renderCanvas = document.getElementById(
