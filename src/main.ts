@@ -55,10 +55,11 @@ const main = async () => {
     true
   ) as WebXRDepthSensing;
 
-  sessionManager.onXRFrameObservable.add(() => {
-    // describe depth image dimentions
-    console.log(depthSensing.width, depthSensing.height);
+  depthSensing.onGetDepthInMetersAvailable.add((getDepthInMeters) => {
+    console.log(getDepthInMeters(0.5, 0.5));
+  });
 
+  sessionManager.onXRFrameObservable.add(() => {
     // obtain depth image texture
     material.diffuseTexture = depthSensing.latestDepthImageTexture;
   });
