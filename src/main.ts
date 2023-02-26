@@ -56,12 +56,41 @@ const main = async () => {
   ) as WebXRDepthSensing;
 
   depthSensing.onGetDepthInMetersAvailable.add((getDepthInMeters) => {
-    console.log(getDepthInMeters(0.5, 0.5));
+    const meters = getDepthInMeters(0.5, 0.5);
+    console.log(meters);
   });
 
   sessionManager.onXRFrameObservable.add(() => {
+    const {
+      depthUsage, // cpu-optimized" or "gpu-optimized"
+      depthDataFormat, // "luminance-alpha" or "float32"
+
+      width, // depth image width
+      height, // depth image height
+
+      rawValueToMeters, // operator of obtain depth value in meters
+
+      normDepthBufferFromNormView, // An XRRigidTransform
+
+      latestDepthImageTexture, // RawTexture for depth image
+      latestDepthBuffer, // depth value array (cpu only)
+      latestWebGLTexture, // WebGLTexture of depth image (gpu only)
+    } = depthSensing;
+
+    console.log(
+      depthUsage,
+      depthDataFormat,
+      width,
+      height,
+      rawValueToMeters,
+      normDepthBufferFromNormView,
+      latestDepthBuffer,
+      latestDepthImageTexture,
+      latestWebGLTexture
+    );
+
     // obtain depth image texture
-    material.diffuseTexture = depthSensing.latestDepthImageTexture;
+    material.diffuseTexture = latestDepthImageTexture;
   });
 
   engine.runRenderLoop(() => {
