@@ -48,8 +48,8 @@ const main = async () => {
     WebXRFeatureName.DEPTH_SENSING,
     "latest",
     {
-      dataFormatPreference: ["luminance-alpha"],
-      usagePreference: ["cpu-optimized"],
+      dataFormatPreference: ["ushort", "float"],
+      usagePreference: ["cpu", "gpu"],
     } as IWebXRDepthSensingOptions,
     true,
     true
@@ -62,8 +62,8 @@ const main = async () => {
 
   sessionManager.onXRFrameObservable.add(() => {
     const {
-      depthUsage, // cpu-optimized" or "gpu-optimized"
-      depthDataFormat, // "luminance-alpha" or "float32"
+      depthUsage, // cpu" or "gpu"
+      depthDataFormat, // "ushort" or "float"
 
       width, // depth image width
       height, // depth image height
@@ -74,10 +74,10 @@ const main = async () => {
 
       latestDepthImageTexture, // RawTexture for depth image
       latestDepthBuffer, // depth value array (cpu only)
-      latestWebGLTexture, // WebGLTexture of depth image (gpu only)
+      latestInternalTexture, // InternalTexture of depth image (gpu only)
     } = depthSensing;
 
-    console.log(
+    console.log([
       depthUsage,
       depthDataFormat,
       width,
@@ -86,8 +86,8 @@ const main = async () => {
       normDepthBufferFromNormView,
       latestDepthBuffer,
       latestDepthImageTexture,
-      latestWebGLTexture
-    );
+      latestInternalTexture,
+    ]);
 
     // obtain depth image texture
     material.diffuseTexture = latestDepthImageTexture;
